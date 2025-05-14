@@ -11,11 +11,11 @@ describe('тест инициализации rootReducer', () => {
     const dummyAction: UnknownAction = { type: 'unknown' };
 
     const expectedState = {
-      burgerConstructor: burgerConstructor(undefined, dummyAction),
-      feeds: feeds(undefined, dummyAction),
-      ingredients: ingredients(undefined, dummyAction),
-      order: order(undefined, dummyAction),
-      user: user(undefined, dummyAction)
+      burgerConstructor: burgerConstructor.getInitialState(),
+      feeds: feeds.getInitialState(),
+      ingredients: ingredients.getInitialState(),
+      order: order.getInitialState(),
+      user: user.getInitialState()
     };
 
     const initialState = rootReducer(undefined, dummyAction);
