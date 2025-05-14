@@ -1,4 +1,4 @@
-import * as orderFixture from '../../fixtures/order.json';
+import * as orderFixture from '../../fixtures/order.json'; 
 
 const BUN_SELECTOR = '[data-testid="ingredient-bun"]';
 const MAIN_SELECTOR = '[data-testid="ingredient-main"]';
@@ -30,11 +30,9 @@ describe('тест конструктора', () => {
     it('открытие модального окна ингридиента', () => {
       cy.get(BUN_SELECTOR).first().as('selectedIngredient');
       cy.get('@selectedIngredient').find('[data-testid="ingredient-name"]').invoke('text').as('ingredientName');
-
       cy.get('@selectedIngredient').click();
       cy.get(MODAL_ROOT).should('exist');
       cy.get('[data-testid="ingredient-details-name"]').should('be.visible');
-
       cy.get('@ingredientName').then((name) => {
         cy.get('[data-testid="ingredient-details-name"]').should('have.text', name);
       });
@@ -64,6 +62,8 @@ describe('тест конструктора', () => {
 
   describe('тест заказа', () => {
     beforeEach(() => {
+      cy.clearCookies();
+      cy.clearLocalStorage();
       cy.setCookie('accessToken', 'EXAMPLE_ACCESS_TOKEN');
       localStorage.setItem('refreshToken', 'EXAMPLE_REFRESH_TOKEN');
 
@@ -76,9 +76,15 @@ describe('тест конструктора', () => {
     });
 
     it('модальное окна заказа', () => {
+      cy.get('[data-testid="burger-constructor"]').should('not.contain', 'Булка 1');
       cy.get(`${BUN_SELECTOR}:first-of-type button`).scrollIntoView().click();
+      cy.get('[data-testid="burger-constructor"]').should('contain', 'Булка 1');
+
       cy.get(`${MAIN_SELECTOR}:first-of-type button`).scrollIntoView().click();
+      cy.get('[data-testid="burger-constructor"]').should('contain', 'Филе');
+
       cy.get(`${SAUCE_SELECTOR}:first-of-type button`).scrollIntoView().click();
+      cy.get('[data-testid="burger-constructor"]').should('contain', 'Соус');
 
       cy.get(ORDER_BUTTON).should('be.enabled').click();
       cy.wait('@postOrder');
@@ -100,4 +106,5 @@ describe('тест конструктора', () => {
     });
   });
 });
+
 
