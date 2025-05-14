@@ -28,9 +28,16 @@ describe('тест конструктора', () => {
 
   describe('тест модальных окон ингридиентов', () => {
     it('открытие модального окна ингридиента', () => {
-      cy.get(BUN_SELECTOR).first().click();
+      cy.get(BUN_SELECTOR).first().as('selectedIngredient');
+      cy.get('@selectedIngredient').find('[data-testid="ingredient-name"]').invoke('text').as('ingredientName');
+
+      cy.get('@selectedIngredient').click();
       cy.get(MODAL_ROOT).should('exist');
       cy.get('[data-testid="ingredient-details-name"]').should('be.visible');
+
+      cy.get('@ingredientName').then((name) => {
+        cy.get('[data-testid="ingredient-details-name"]').should('have.text', name);
+      });
     });
 
     describe('тест закрытия модального окна', () => {
@@ -84,6 +91,7 @@ describe('тест конструктора', () => {
 
       cy.get(MODAL_CLOSE_BUTTON).click();
     });
+
     it('очищение конструктора', () => {
       cy.get('[data-testid="burger-constructor"]').should(
         'contain',
@@ -92,3 +100,4 @@ describe('тест конструктора', () => {
     });
   });
 });
+
